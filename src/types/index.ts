@@ -239,3 +239,4 @@ export interface ReportForm {
   longitude?: number;
   locality?: string;
 }
+

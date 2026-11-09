@@ -1,0 +1,292 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// Users
+// ============================================================
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  password  String
+  avatarUrl String?  @map("avatar_url")
+  role      Role     @default(USER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  animals        Animal[]
+  sightings      Sighting[]
+  savedAnimals   SavedAnimal[]
+  animalReports  AnimalReport[]   @relation("ReportedBy")
+  reviewedReports AnimalReport[]  @relation("ReviewedBy")
+  verifiedSightings Sighting[]   @relation("VerifiedBy")
+
+  @@map("users")
+}
+
+enum Role {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+// ============================================================
+// Animals
+// ============================================================
+
+model Animal {
+  id             String         @id @default(uuid())
+  pawtraceId     String         @unique @map("pawtrace_id")
+  name           String
+  species        Species
+  description    String?
+  locality       String
+  approximateAge String?        @map("approximate_age")
+  gender         Gender         @default(UNKNOWN)
+  primaryPhoto   String         @map("primary_photo")
+  registeredById String         @map("registered_by_id")
+  registeredBy   User           @relation(fields: [registeredById], references: [id])
+  deviceId       String?        @unique @map("device_id")
+  device         Device?        @relation(fields: [deviceId], references: [id])
+  trackingStatus TrackingStatus @default(NO_COLLAR) @map("tracking_status")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  photos         AnimalPhoto[]
+  sightings      Sighting[]
+  savedBy        SavedAnimal[]
+  reports        AnimalReport[]
+  timelineEvents TimelineEvent[]
+
+  @@index([name])
+  @@index([pawtraceId])
+  @@index([species])
+  @@index([locality])
+  @@index([createdAt])
+  @@map("animals")
+}
+
+enum Species {
+  DOG
+  CAT
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+enum TrackingStatus {
+  RECENTLY_UPDATED
+  LAST_REPORTED
+  OFFLINE
+  GPS_UNAVAILABLE
+  NO_COLLAR
+}
+
+// ============================================================
+// Animal Photos
+// ============================================================
+
+model AnimalPhoto {
+  id        String   @id @default(uuid())
+  animalId  String   @map("animal_id")
+  animal    Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  url       String
+  caption   String?
+  isPrimary Boolean  @default(false) @map("is_primary")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([animalId])
+  @@map("animal_photos")
+}
+
+// ============================================================
+// Devices (GPS Collars)
+// ============================================================
+
+model Device {
+  id              String       @id @default(uuid())
+  deviceId        String       @unique @map("device_id")
+  status          DeviceStatus @default(INACTIVE)
+  batteryLevel    Int?         @map("battery_level")
+  lastSeenAt      DateTime?    @map("last_seen_at")
+  firmwareVersion String?      @map("firmware_version")
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  animal       Animal?
+  gpsLocations GPSLocation[]
+
+  @@index([deviceId])
+  @@index([status])
+  @@map("devices")
+}
+
+enum DeviceStatus {
+  ONLINE
+  OFFLINE
+  INACTIVE
+  UNREGISTERED
+}
+
+// ============================================================
+// GPS Locations
+// ============================================================
+
+model GPSLocation {
+  id           String   @id @default(uuid())
+  deviceId     String   @map("device_id")
+  device       Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  latitude     Float
+  longitude    Float
+  altitude     Float?
+  satellites   Int?
+  batteryLevel Int?     @map("battery_level")
+  timestamp    DateTime
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([deviceId])
+  @@index([timestamp])
+  @@index([deviceId, timestamp(sort: Desc)])
+  @@map("gps_locations")
+}
+
+// ============================================================
+// Sightings
+// ============================================================
+
+model Sighting {
+  id           String         @id @default(uuid())
+  animalId     String?        @map("animal_id")
+  animal       Animal?        @relation(fields: [animalId], references: [id])
+  reportedById String         @map("reported_by_id")
+  reportedBy   User           @relation(fields: [reportedById], references: [id])
+  species      Species
+  photoUrl     String?        @map("photo_url")
+  latitude     Float
+  longitude    Float
+  locality     String
+  notes        String?
+  sightedAt    DateTime       @map("sighted_at")
+  status       SightingStatus @default(PENDING)
+  verifiedById String?        @map("verified_by_id")
+  verifiedBy   User?          @relation("VerifiedBy", fields: [verifiedById], references: [id])
+  verifiedAt   DateTime?      @map("verified_at")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  @@index([animalId])
+  @@index([status])
+  @@index([sightedAt])
+  @@index([locality])
+  @@map("sightings")
+}
+
+enum SightingStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
+  NEEDS_REVIEW
+}
+
+// ============================================================
+// Saved Animals
+// ============================================================
+
+model SavedAnimal {
+  id       String   @id @default(uuid())
+  userId   String   @map("user_id")
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  animalId String   @map("animal_id")
+  animal   Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  savedAt  DateTime @default(now()) @map("saved_at")
+
+  @@unique([userId, animalId])
+  @@index([userId])
+  @@index([animalId])
+  @@map("saved_animals")
+}
+
+// ============================================================
+// Animal Reports (Emergency / Welfare)
+// ============================================================
+
+model AnimalReport {
+  id           String         @id @default(uuid())
+  animalId     String?        @map("animal_id")
+  animal       Animal?        @relation(fields: [animalId], references: [id])
+  reportedById String         @map("reported_by_id")
+  reportedBy   User           @relation("ReportedBy", fields: [reportedById], references: [id])
+  category     ReportCategory
+  description  String
+  photoUrl     String?        @map("photo_url")
+  latitude     Float?
+  longitude    Float?
+  locality     String?
+  status       ReportStatus   @default(OPEN)
+  reviewedById String?        @map("reviewed_by_id")
+  reviewedBy   User?          @relation("ReviewedBy", fields: [reviewedById], references: [id])
+  reviewedAt   DateTime?      @map("reviewed_at")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([category])
+  @@index([createdAt])
+  @@map("animal_reports")
+}
+
+enum ReportCategory {
+  INJURED
+  MISSING
+  NEEDS_ASSISTANCE
+  DAMAGED_COLLAR
+  MISSING_COLLAR
+}
+
+enum ReportStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  CLOSED
+}
+
+// ============================================================
+// Timeline Events
+// ============================================================
+
+model TimelineEvent {
+  id          String            @id @default(uuid())
+  animalId    String            @map("animal_id")
+  animal      Animal            @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  type        TimelineEventType
+  title       String
+  description String?
+  metadata    Json?
+  createdAt   DateTime          @default(now()) @map("created_at")
+
+  @@index([animalId])
+  @@index([createdAt])
+  @@map("timeline_events")
+}
+
+enum TimelineEventType {
+  REGISTERED
+  PHOTO_ADDED
+  COLLAR_ASSIGNED
+  COLLAR_REMOVED
+  SIGHTING
+  LOCATION_UPDATE
+  REPORT
+  PROFILE_UPDATED
+}
+
