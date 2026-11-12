@@ -1,4 +1,4 @@
-# Pawthik (Paw-থিক) — PAWTRACE 🐾
+# Pawthik (Paw-থিক) 🐾
 ### Every Paw Has a Place.
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.4.5-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
@@ -9,7 +9,7 @@
 [![ESP32](https://img.shields.io/badge/Hardware-ESP32%20%2B%20NEO--6M-E7352C?style=for-the-badge&logo=espressif&logoColor=white)](https://www.espressif.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-**Pawthik (Paw-থিক)** — *PAWTRACE* is an open-source, community-driven street animal identification, GPS tracking, and welfare management platform. Engineered to bridge humane animal care with low-cost open hardware (ESP32 + NEO-6M GNSS) and high-grade editorial product design, PAWTRACE provides street dogs and community cats with permanent digital identities, territorial tracking, medical records, and crowdsourced emergency care coordination.
+**Pawthik (Paw-থিক)** —is an open-source, community-driven street animal identification, GPS tracking, and welfare management platform. Engineered to bridge humane animal care with low-cost open hardware (ESP32 + NEO-6M GNSS) and high-grade editorial product design, PAWTRACE provides street dogs and community cats with permanent digital identities, territorial tracking, medical records, and crowdsourced emergency care coordination.
 
 ---
 
