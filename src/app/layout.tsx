@@ -26,12 +26,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Pawthik (Paw-থিক) — Know exactly where your pet is. Down to the tree.',
+  title: 'Pawtrace — Let them roam. Stay close.',
   description:
-    'Pawthik (Paw-থিক) is an independent 4G GPS tracking collar and community animal welfare platform that puts live location on your phone. Safe zones, route history, live audio chime, zero monthly subscription fees.',
+    'Pawtrace is an independent 4G GPS tracking collar and community animal welfare platform that puts live location on your phone. Safe zones, route history, live audio chime, zero monthly subscription fees.',
   keywords: [
     'pawthik',
-    'paw-থিক',
+    'pawtrace',
     'pet tracker',
     'dog gps collar',
     'cat tracker',
@@ -40,11 +40,11 @@ export const metadata: Metadata = {
     '4g pet tracker',
   ],
   openGraph: {
-    title: 'Pawthik (Paw-থিক) — Know exactly where your pet is. Down to the tree.',
+    title: 'Pawtrace — Let them roam. Stay close.',
     description:
       'Independent 4G tracking collar with zero monthly subscription fees. Safe Zones from 100m to 3km, satellite positioning, cellular delivery.',
     type: 'website',
-    siteName: 'Pawthik',
+    siteName: 'Pawtrace',
   },
 };
 

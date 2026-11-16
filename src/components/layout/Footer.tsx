@@ -23,17 +23,17 @@ const legalLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#241F4E] text-[#FFF7E8]">
+    <footer className="site-footer bg-[#241F4E] text-[#FFF7E8]">
       {/* Main footer */}
       <div className="mx-auto max-w-[var(--container-wide)] px-6 lg:px-10 pt-20 pb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
           {/* Brand column */}
           <div className="lg:col-span-5 space-y-5">
-            <Link href="/" className="inline-block" aria-label="Pawthik Home">
+            <Link href="/" className="inline-block" aria-label="Pawtrace home">
               <span className="font-display text-3xl font-extrabold tracking-tight text-[#FFF7E8]">
-                Paw<span className="text-[#FF8A3D]">-থিক</span>
+                paw<span className="text-[#FF8A3D]">trace</span>
               </span>
-              <span className="block text-xs font-mono text-[#B7B2DC] mt-0.5">Pawthik Platform</span>
+              <span className="block text-xs font-mono text-[#B7B2DC] mt-0.5">Pawtrace Platform</span>
             </Link>
 
             <p className="font-display text-xl text-[#FFC93C] leading-snug">
@@ -49,7 +49,7 @@ export default function Footer() {
             {/* Quick status pill */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs text-[#FFF7E8] font-mono">
               <span className="w-2 h-2 rounded-full bg-[#4FCB77] animate-pulse" />
-              <span>Collar Mesh: Operational (4G LTE / GNSS)</span>
+              <span>Connected care for every paw</span>
             </div>
           </div>
 
@@ -119,7 +119,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-[var(--container-wide)] px-6 lg:px-10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 font-body text-xs text-[#B7B2DC]">
           <p className="text-center sm:text-left">
-            © {new Date().getFullYear()} Pawthik (Paw-থিক) — Some call them strays. We call them neighbours.
+            © {new Date().getFullYear()} Pawtrace — Some call them strays. We call them neighbours.
           </p>
 
           <div className="flex items-center gap-3">
